@@ -9,6 +9,7 @@ var usersRouter = require('./routes/users');
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
+const uploadRouter = require('./routes/uploadRouter');
 //autorizacijai
 var passport = require('passport');
 var authenticate = require('./authenticate');
@@ -56,6 +57,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/imageUpload',uploadRouter);
 
 // before con
 app.use('/', indexRouter);

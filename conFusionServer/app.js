@@ -10,6 +10,7 @@ var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
 const uploadRouter = require('./routes/uploadRouter');
+var favoriteRouter = require("./routes/favoriteRouter");
 //autorizacijai
 var passport = require('passport');
 var authenticate = require('./authenticate');
@@ -21,6 +22,8 @@ var FileStore = require('session-file-store')(session);
 const mongoose = require('mongoose');
 
 const Dishes = require('./models/dishes');
+const Promotions = require('./models/promotions');
+const leaders = require('./models/leaders');
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
@@ -57,26 +60,26 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/imageUpload',uploadRouter);
+
 
 // before con
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
 
-function auth (req, res, next) {
-  console.log(req.user);
+// function auth (req, res, next) {
+//   console.log(req.user);
 
-  if (!req.user) {
-    var err = new Error('You are not authenticated!');
-    err.status = 403;
-    next(err);
-  }
-  else {
-        next();
-  }
-}
+//   if (!req.user) {
+//     var err = new Error('You are not authenticated!');
+//     err.status = 403;
+//     next(err);
+//   }
+//   else {
+//         next();
+//   }
+// }
 
-app.use(auth);
+// app.use(auth);
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -88,7 +91,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/dishes',dishRouter);
 app.use('/promotions',promoRouter);
 app.use('/leaders',leaderRouter);
+app.use("/favorite", favoriteRouter);
 
+
+app.use('/imageUpload',uploadRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
